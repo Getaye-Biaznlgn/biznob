@@ -1,6 +1,6 @@
 import 'package:biznob/controller/post_controller.dart';
 import 'package:biznob/models/media.dart';
-import 'package:biznob/screens/account/account.dart';
+import 'package:biznob/screens/market/market.dart';
 import 'package:biznob/screens/homepage/home_page.dart';
 import 'package:biznob/screens/video/video_page.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +32,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    getImages();
     super.initState();
+    getImages();
   }
 
   @override
@@ -51,8 +51,8 @@ class _MainPageState extends State<MainPage> {
             label: 'Video',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Me',
+            icon: Icon(Icons.auto_graph),
+            label: 'Market',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -14,10 +14,7 @@ class HomeItem extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: HomePageView(),
-          ),
+          const HomePageView(),
           ...categories
               .map(
                 (category) => PostByCategory(
@@ -38,7 +35,7 @@ class PostByCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+      padding: const EdgeInsets.only(bottom: 10,),
       child: Column(
         children: [
           Padding(

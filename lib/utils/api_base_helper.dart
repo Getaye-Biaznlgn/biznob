@@ -4,9 +4,9 @@ import 'package:http/http.dart' as http;
 import 'api_exception.dart';
 
 class ApiBaseHelper {
-  final String _baseUrl = "https://www.biznob.com/wp-json/wp/v2";
+  static const String _baseUrl = "https://www.biznob.com/wp-json/wp/v2";
   // final String _baseUrl = "http://192.168.0.3:5000";
-  Future<dynamic> get({required String url, token}) async {
+  Future<dynamic> get({baseUrl = _baseUrl, required String url, token}) async {
     final responseJson;
     try {
       final http.Response response =
@@ -30,13 +30,14 @@ class ApiBaseHelper {
       final http.Response response = await http.get(Uri.parse(url), headers: {
         'Content-type': 'application/json',
         'Accept': 'application/json',
-        'Retry-After': '3600'
+        'Retry-After': '3600',
+        
+        'X-RapidAPI-Key':'e4cfe474b4mshdde66469e306f0ep19e9a8jsnc6107c58a963'
       });
 
       responseJson = _returnResponse(response);
       print('List of video');
       print(responseJson);
-      
     } on SocketException {
       throw FetchDataException(message: 'No Internet connection');
     }

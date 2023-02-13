@@ -46,8 +46,11 @@ dependencies:
   equatable: ^2.0.5
   flutter_html:
   cached_network_image: ^3.2.3
-  video_player: ^2.5.1
+  # video_player: ^2.5.1
   flutter_screenutil:
+  youtube_player_flutter: 8.1.2
+  loader_overlay: ^2.1.0
+  flutter_launcher_icons: ^0.11.0
   
   # flutter_widget_from_html: ^0.9.1
 

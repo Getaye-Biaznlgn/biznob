@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:biznob/screens/homeitem/home_item.dart';
 import 'package:biznob/screens/homepage/other_item.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +15,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Category? _selectedCatagory;
-  Widget _selectedWidget = HomeItem(
-
-      // (){
-      //    setSelectedItem(Catagory(id: 1, name: 'name'));
-      // }
-
-      );
+  Widget _selectedWidget = const HomeItem();
 
   setSelectedItem(Category catagory) {
     _selectedWidget = OtherItem(catagory: catagory);
+  }
+
+  navigateToHome() {
+    if (_selectedCatagory != null) {
+      setState(() {
+        _selectedCatagory = null;
+        _selectedWidget = const HomeItem();
+      });
+    }
   }
 
   @override
@@ -31,15 +36,25 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
+            Container(
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                Colors.black.withOpacity(0.7),
+                Colors.black.withOpacity(0.09)
+              ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(children: [
-                Text(
-                  'Biznob',
-                  style: TextStyle(
-                      color: Colors.blue[800],
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                TextButton(
+                  onPressed: () {
+                    navigateToHome();
+                  },
+                  child: Text(
+                    'Biznob',
+                    style: TextStyle(
+                        color: Colors.blue[800],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
                 ),
                 Expanded(
                     child: SingleChildScrollView(
@@ -48,19 +63,16 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       TextButton(
                           onPressed: () {
-                            if (_selectedCatagory != null) {
-                              setState(() {
-                                _selectedCatagory = null;
-                                _selectedWidget = HomeItem();
-                              });
-                            }
+                            navigateToHome();
                           },
                           child: Text(
                             'Home',
                             style: _selectedCatagory == null
                                 ? const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)
-                                : const TextStyle(),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white)
+                                : const TextStyle(color: Colors.white),
                           )),
                       ...categories
                           .map((catagory) => TextButton(
@@ -76,8 +88,9 @@ class _HomePageState extends State<HomePage> {
                                   style: _selectedCatagory == catagory
                                       ? const TextStyle(
                                           fontSize: 18,
+                                          color: Colors.white,
                                           fontWeight: FontWeight.bold)
-                                      : const TextStyle())))
+                                      : const TextStyle(color: Colors.white))))
                           .toList()
                     ],
                   ),

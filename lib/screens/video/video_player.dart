@@ -1,80 +1,108 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
-class VideoPlayerWidget extends StatefulWidget {
-  const VideoPlayerWidget({Key? key, required this.url})
-      : super(key: key);
-  // final File? file;
-  final String? url;
+class VideoPlayer extends StatefulWidget {
+  const VideoPlayer({super.key, required this.videoId});
+  final String videoId;
+
   @override
-  _VideoAppState createState() => _VideoAppState();
+  State<VideoPlayer> createState() => _VideoPlayerState();
 }
 
-class _VideoAppState extends State<VideoPlayerWidget> {
-  late VideoPlayerController _controller;
+class _VideoPlayerState extends State<VideoPlayer> {
+  late YoutubePlayerController _controller;
+  late PlayerState _playerState;
+  late YoutubeMetaData _videoMetaData;
+  double _volume = 100;
+   bool _muted = false;
+  bool _isPlayerReady = false;
 
   @override
+  // void initState() {
+  //   super.initState();
+  //   _controller = YoutubePlayerController(
+  //     initialVideoId: widget.videoId,
+  //     flags: const YoutubePlayerFlags(
+  //       autoPlay: false,
+  //       mute: true,
+  //     ),
+  //   );
+  // }
+
   void initState() {
     super.initState();
-    if (widget.url != null) {
-      _controller = VideoPlayerController.network(widget.url!)
-        ..initialize().then((_) {
-          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-          setState(() {});
-        });
-    }
-    // if (widget.file != null) {
-    //   _controller = VideoPlayerController.file(widget.file!)
-    //     ..initialize().then((_) {
-    //       // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-    //       setState(() {});
-    //     });
-    // }
+    _controller = YoutubePlayerController(
+      initialVideoId: widget.videoId,
+      flags: const YoutubePlayerFlags(
+        mute: false,
+        autoPlay: false,
+        disableDragSeek: false,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: true,
+      ),
+    )..addListener(listener);
+    // _idController = TextEditingController();
+    // _seekToController = TextEditingController();
+    _videoMetaData = const YoutubeMetaData();
+    _playerState = PlayerState.unknown;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200.h,
-      width: 200.w,
-      child: Scaffold(
-        body: Center(
-          child: _controller.value.isInitialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                )
-              : Container(),
-        ),
-        floatingActionButton: SizedBox(
-          height: 30.h,
-          width: 30.w,
-          child: FloatingActionButton(
-            heroTag: 'f1',
-            onPressed: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-            ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      ),
-    );
+  void listener() {
+    if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
+      setState(() {
+        _playerState = _controller.value.playerState;
+        _videoMetaData = _controller.metadata;
+      });
+    }
   }
 
   @override
   void dispose() {
-        _controller.dispose();
-
+    _controller.dispose();
+    // _idController.dispose();
+    // _seekToController.dispose();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
+      progressIndicatorColor: Colors.amber,
+      // progressColors: ProgressColors(
+      //     playedColor: Colors.amber,
+      //     handleColor: Colors.amberAccent,
+      // ),
+       topActions: <Widget>[
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Text(
+              _controller.metadata.title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+          // IconButton(
+          //   icon: const Icon(
+          //     Icons.settings,
+          //     color: Colors.white,
+          //     size: 25.0,
+          //   ),
+          //   onPressed: () {
+          //     // log('Settings Tapped!');
+          //   },
+          // ),
+        ],
+      onReady: () {
+        _controller.addListener(listener);
+      },
+    );
   }
 }

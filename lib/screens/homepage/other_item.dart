@@ -33,7 +33,6 @@ class OtherItem extends StatelessWidget {
                                     DetailPage(post: posts[0])));
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
                         height: size.height * 0.35,
                         width: double.infinity,
                         decoration: BoxDecoration(

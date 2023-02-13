@@ -3,7 +3,7 @@ import 'package:biznob/utils/api_base_helper.dart';
 
 class VideoController {
   final ApiBaseHelper _apiBaseHelper = ApiBaseHelper();
-  String key = 'AIzaSyAMVQ4hBremH0bPoUX27xkXbIXjNeFDJec';
+  String key = 'cccc';
   String channelId = 'UCRuQYkYlu7KVEVHxxtTO72g';
   Future<List<Video>> fetchVideos() async {
     try {

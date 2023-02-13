@@ -98,7 +98,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       DetailPage(post: post)));
                         },
                         child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          // margin: const EdgeInsets.symmetric(horizontal: 8),
                           height: size.height * 0.35,
                           width: double.infinity,
                           decoration: BoxDecoration(
